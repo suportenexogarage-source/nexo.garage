@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://suportenexogarage-source.github.io/nexo.garage/sitemap.xml
