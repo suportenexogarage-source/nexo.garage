@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta name="google-site-verification" content="CTDeGv8I8Bs0e02Et8Av4POp-0rf-lTVnUXUs5mXVWk" />
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NEXO Garage — Estética Automotiva</title>
@@ -271,7 +270,7 @@ document.addEventListener("click",e=>{const a=e.target.closest(".wa");if(a)a.hre
 sw(".wa",WM.home);
 sw(".insb","e gostaria de um orçamento de instalação de insulfilm. Posso enviar o modelo do veículo?");
 sw(".estb","e gostaria de agendar a limpeza de estofados (sofá) a domicílio. Posso enviar fotos?");
-const FB={projectId:"",apiKey:""};
+const FB={projectId:"nexo-garage",apiKey:"AIzaSyCs_FOsQ2KRkG07FYbHYcZFAScZE3HBTSo"};
 const fsOn=()=>FB.projectId&&FB.apiKey,fsUrl=()=>`https://firestore.googleapis.com/v1/projects/${FB.projectId}/databases/(default)/documents`;
 let RV=[],nota=0;
 const msg=t=>{$("#rm").textContent=t};
@@ -282,7 +281,7 @@ function paint(){$("#rv").replaceChildren(...RV.map(rcard));$("#sum").textConten
 async function loadR(){if(!fsOn())return;try{const r=await fetch(fsUrl()+":runQuery?key="+FB.apiKey,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({structuredQuery:{from:[{collectionId:"avaliacoes"}],orderBy:[{field:{fieldPath:"criadoEm"},direction:"DESCENDING"}],limit:30}})});const d=await r.json();RV=d.filter(x=>x.document).map(x=>{const f=x.document.fields;return{nome:f.nome.stringValue,nota:+f.nota.integerValue,comentario:f.comentario.stringValue}});paint()}catch(e){}}
 $("#rf").addEventListener("submit",async e=>{e.preventDefault();if($("#rh").value)return;const nome=$("#rn").value.trim(),com=$("#rc").value.trim();
 if(!nota)return msg("Toque nas estrelas para dar a sua nota.");if(!nome)return msg("Escreva o seu nome.");if(com.length<5)return msg("Escreva um comentário curto sobre o serviço.");
-if(!fsOn()){const u=link("Olá! Quero deixar minha avaliação da NEXO:\nNota: "+nota+" de 5 ★\nNome: "+nome+"\nAvaliação: "+com);msg("Abrindo o WhatsApp para enviar sua avaliação…");if(!window.open(u,"_blank"))location.href=u;return}
+if(!fsOn())return msg("As avaliações estarão disponíveis em breve.");
 try{if(Date.now()-(+localStorage.getItem("nx_r")||0)<60000)return msg("Aguarde um minuto para enviar outra avaliação.")}catch(_){}
 const btn=e.target.querySelector(".btn");btn.disabled=true;msg("Enviando…");
 try{const r=await fetch(fsUrl()+"/avaliacoes?key="+FB.apiKey,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields:{nome:{stringValue:nome},nota:{integerValue:String(nota)},comentario:{stringValue:com},criadoEm:{timestampValue:new Date().toISOString()}}})});if(!r.ok)throw 0;
